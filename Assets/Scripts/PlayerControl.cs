@@ -14,18 +14,21 @@ public class PlayerControl : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         float moveX = Input.GetAxis("Horizontal");
         rb.MovePosition(rb.position + Vector2.right * moveX * speed * Time.deltaTime);
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            rb.AddForce(Vector2.up * 10000);
 
         if (moveX > 0 && !faceRight)
             flip();
         else if (moveX < 0 && faceRight)
             flip();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            rb.AddForce(Vector2.up * 10000);
     }
 
     void flip()
