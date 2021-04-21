@@ -229,6 +229,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
+  jumpForce: 75
+  healthPoints: 10
 --- !u!61 &585612977
 BoxCollider2D:
   m_ObjectHideFlags: 0

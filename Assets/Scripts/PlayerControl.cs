@@ -4,36 +4,51 @@ using UnityEngine;
 
 public class PlayerControl : MonoBehaviour
 {
-    public float speed = 100f;
+    [SerializeField]
+    private float speed = 100f;
+    [SerializeField]
+    private float jumpForce = 100f;
     private Rigidbody2D rb;
     private bool faceRight = true;
+    private Animator animator;
+    [SerializeField]
+    private int healthPoints = 10;
+    private SpriteRenderer sprite;
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        sprite = GetComponentInChildren<SpriteRenderer>();
+        rb = GetComponentInChildren<Rigidbody2D>();
+        animator = GetComponentInChildren<Animator>();
+    }
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        float moveX = Input.GetAxis("Horizontal");
-        rb.MovePosition(rb.position + Vector2.right * moveX * speed * Time.deltaTime);
-
-        if (moveX > 0 && !faceRight)
-            flip();
-        else if (moveX < 0 && faceRight)
-            flip();
+        if (Input.GetButton("Horizontal")) Move();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-            rb.AddForce(Vector2.up * 10000);
+        if (Input.GetKeyDown(KeyCode.Space) 
+            && Physics2D.OverlapCircleAll(transform.position, 0.75f).Length > 1) Jump();
     }
 
-    void flip()
+    void Move()
     {
-        faceRight = !faceRight;
-        transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
+        float moveX = Input.GetAxis("Horizontal");
+        rb.MovePosition(rb.position + Vector2.right * (moveX * speed * Time.deltaTime));
+
+        sprite.flipX = moveX < 0;
+    }
+
+    void Jump()
+    {
+        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     }
 }
